@@ -8,8 +8,7 @@ pimage = None
 
 # ฟังก์ชันแสดงข้อมูลใน Treeview
 def show_data():
-    rows = ShowData()
-    update_tree(rows)
+    pass
 
 # ฟังก์ชันค้นหา
 def on_search():
@@ -29,9 +28,8 @@ def on_search():
 def update_tree(rows):
     for i in tree_widget.get_children():
         tree_widget.delete(i)  # ลบข้อมูลเดิมทั้งหมด
-    for index, row in enumerate(rows, start=1):  # เริ่มต้นลำดับจาก 1
-        order = index  # ลำดับ
-        tree_widget.insert('', 'end', values=(order, *row))  # เพิ่มข้อมูลใหม่ที่ได้จากการค้นหา
+    for row in rows:
+        tree_widget.insert('', 'end', values=row)  # เพิ่มข้อมูลใหม่ที่ได้จากการค้นหา
 
 
 # ฟังก์ชันเลือกไฟล์ภาพและบันทึก path ไว้ในตัวแปร
@@ -44,23 +42,7 @@ def select_image():
 
 # ฟังก์ชันเมื่อคลิกที่แถวใน tree_widget
 def on_tree_select(event):
-    selected_item = tree_widget.selection()
-    if selected_item:
-        # ดึงค่าจากแถวที่เลือก
-        values = tree_widget.item(selected_item, 'values')
-        
-        # แสดงค่าลงในฟอร์ม
-        name_entry.delete(0, tk.END)
-        name_entry.insert(0, values[1])  # ชื่อ
-
-        type_combobox.set(values[2])  # ประเภท
-
-        # สมมติว่า path ของภาพถูกเก็บในฐานข้อมูลและเป็นค่าใน values[3]
-        global pimage
-        pimage = values[3]
-        image_button.config(text=pimage)  # แสดง path ของภาพ
-        # อัปเดตรหัสใน code_value (values[0] คือรหัส)
-        code_value.config(text=values[0])  # แสดงรหัสของข้อมูลที่เลือก
+    pass
 
 # ฟังก์ชันเพิ่มต้นไม้
 def on_add():
@@ -93,27 +75,11 @@ def on_add():
 
 # ฟังก์ชันลบต้นไม้
 def on_delete():
-    selected_item = tree_widget.selection()
-    if selected_item:
-        pid = tree_widget.item(selected_item)['values'][0]
-        dele(pid)
-        show_data()
-        messagebox.showinfo("Success", "ข้อมูลต้นไม้ถูกลบเรียบร้อยแล้ว!")
-    else:
-        messagebox.showwarning("Warning", "กรุณาเลือกข้อมูลที่จะลบ")
+    pass
 
 # ฟังก์ชันแก้ไขต้นไม้
 def on_edit():
-    selected_item = tree_widget.selection()
-    if selected_item:
-        pid = tree_widget.item(selected_item)['values'][0]
-        pname = name_entry.get()
-        ptype = type_combobox.get()
-        edit(pid, pname, ptype, pimage)
-        show_data()
-        messagebox.showinfo("Success", "ข้อมูลต้นไม้ถูกแก้ไขเรียบร้อยแล้ว!")
-    else:
-        messagebox.showwarning("Warning", "กรุณาเลือกข้อมูลที่จะแก้ไข")
+    pass
 
 # ฟังก์ชันเคลียร์ฟอร์ม
 def clear_form():
@@ -220,16 +186,12 @@ update_button.grid(row=2, column=0, padx=5, pady=5)
 tree_frame = ttk.Frame(main_frame, padding="5", relief="solid")
 tree_frame.grid(row=2, column=0, columnspan=2, sticky="nsew", padx=10, pady=10)
 
-tree_widget = ttk.Treeview(tree_frame, columns=("Order","Id", "Name", "Type", "Image"), show="headings", height=10)
-tree_widget.heading("Order", text="ลำดับ")
+tree_widget = ttk.Treeview(tree_frame, columns=("Id", "Name", "Type", "Image"), show="headings", height=10)
 tree_widget.heading("Id", text="รหัส")
 tree_widget.heading("Name", text="ชื่อ")
 tree_widget.heading("Type", text="ประเภท")
 tree_widget.heading("Image", text="ภาพ")
 tree_widget.grid(row=0, column=0, sticky="nsew")
-
-tree_widget.column("Order", width=50)
-tree_widget.column("Id", width=50)
 
 # การจัดการ column weight ใน tree frame
 tree_frame.grid_rowconfigure(0, weight=1)
